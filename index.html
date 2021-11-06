@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <greeter-elem></greeter-elem>
+    <greeter-elem name="John"></greeter-elem>
+    <greeter-elem name="Jane"></greeter-elem>
+    <script>
+      class Greeter extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" }).innerHTML =
+            '<div id="content"></div>';
+          this.name = "Doe";
+        }
+
+        connectedCallback() {
+          this.update();
+        }
+
+        attributeChangedCallback(attrName, old, newVal) {
+          // you code here
+          this.update();
+        }
+
+        update() {
+          // you code here
+          const p = document.createElement("p");
+          if (this.getAttribute("name") == null) {
+            this.setAttribute("name", this.name);
+          }
+          p.textContent = `Hello, ${this.getAttribute("name")}`;
+          if (this.shadowRoot.querySelector("p") == null) {
+            this.shadowRoot.getElementById("content").appendChild(p);
+          }
+          this.shadowRoot.getElementById(
+            "content"
+          ).innerHTML = `Hello, ${this.getAttribute("name")}`;
+        }
+
+        static get observedAttributes() {
+          // you code here
+          return ["name"];
+        }
+      }
+      customElements.define("greeter-elem", Greeter);
+    </script>
+  </body>
+</html>
